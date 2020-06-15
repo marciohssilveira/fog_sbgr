@@ -2,10 +2,6 @@ import pandas as pd
 
 sbgr_data = pd.read_csv('data/sbgr_data.csv', index_col='DATE')
 
-fog_sbgr = sbgr_data[sbgr_data['visibility'] < 1000]
-
-# Try to use some time shift to create a "rate" for the variables
-
 
 def make_shift(df, column):
     shifts = list(range(1, 13))
@@ -14,4 +10,12 @@ def make_shift(df, column):
     return shift
 
 
-teste = make_shift(sbgr_data, 'ceiling')
+shiftable_columns = ['direction', 'speed', 'visibility', 'ceiling', 'temperature', 'dew', 'slp']
+
+
+shifted_dict = {}
+for column in shiftable_columns:
+    shifted_dict[column] = make_shift(sbgr_data, column)
+
+
+shifted_df = pd.concat(list(shifted_dict.values()), axis=1)

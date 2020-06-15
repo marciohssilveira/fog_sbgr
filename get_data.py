@@ -3,6 +3,7 @@ import pandas as pd
 import os
 import time
 import re
+import numpy as np
 
 # Fetching the files from NOAA Integrated Surface Database (ISD)
 # License: https://www.ncdc.noaa.gov/isd/data-access
@@ -128,7 +129,7 @@ base_data['visibility'][base_data['visibility'] == 999999] = 10000
 codes = pd.read_csv('./data/wx_codes.csv', sep=';', index_col='Code')
 codes.index = codes.index.map("{:02}".format)
 codes_dict = codes['Phenomenon'].to_dict()
-phenomena = base_data.filter(like='phenomenon').fillna('00').astype(int).astype(str).replace('0', np.nan)
+phenomena = base_data.filter(like='phenomenon').fillna('00').astype(int).astype(str).replace('0', 'None')
 base_data[phenomena.columns] = phenomena.replace(codes_dict)
 
 
