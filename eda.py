@@ -10,3 +10,5 @@ print(fog.info())
 fog['DATE'] = pd.to_datetime(fog['DATE'])
 
 fog.groupby(pd.Grouper(key='DATE', freq='h'))['temperature'].mean()
+
+# next step: pivot tables
