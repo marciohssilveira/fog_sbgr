@@ -1,6 +1,5 @@
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.decomposition import PCA
 from sklearn.linear_model import LogisticRegression
 from sklearn.tree import DecisionTreeClassifier
@@ -12,6 +11,7 @@ from sklearn.naive_bayes import GaussianNB
 from sklearn.metrics import accuracy_score, precision_score, recall_score, roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
+
 
 # Opening the data
 sbgr = pd.read_csv('./data/labeled_fog.csv')
@@ -57,34 +57,19 @@ metrics = ['Accuracy', 'Precision', 'Recall', 'AUC']
 classification_summary = pd.DataFrame(columns=metrics)
 
 for model_name, model in list(zip(model_names, models)):
-      model.fit(X_train, y_train)
-      y_pred = model.predict(X_test)
-      accuracy = accuracy_score(y_test, y_pred)
-      precision = precision_score(y_test, y_pred)
-      recall = recall_score(y_test, y_pred)
-      auc = roc_auc_score(y_test, y_pred)
-      classification_summary.loc[model_name] = [accuracy, precision, recall, auc]
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    accuracy = accuracy_score(y_test, y_pred)
+    precision = precision_score(y_test, y_pred)
+    recall = recall_score(y_test, y_pred)
+    auc = roc_auc_score(y_test, y_pred)
+    classification_summary.loc[model_name] = [accuracy, precision, recall, auc]
 
 print(classification_summary)
 
 
-# Running the chosen model
-model = LogisticRegression(penalty='l2', C=0.1)
-model.fit(X_train, y_train)
-y_pred_train = model.predict(X_train)
+# Implementing the model
+model = MLPClassifier().fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
-# Metrics
-print(f'Accuracy (train): {accuracy_score(y_train, y_pred_train):.4f}, '
-      f'Precision (train): {precision_score(y_train, y_pred_train):.4f},'
-      f'Recall (train): {recall_score(y_train, y_pred_train):.4f}',
-      f'AUC (train): {roc_auc_score(y_train, y_pred_train):.4f}')
-print(f'Accuracy (test): {accuracy_score(y_test, y_pred):.4f}, '
-      f'Precision (test): {precision_score(y_test, y_pred):.4f}, '
-      f'Recall (test): {recall_score(y_test, y_pred):.4f}',
-      f'AUC (test): {roc_auc_score(y_test, y_pred):.4f}')
-
-# Testing
-# X_input = np.array([1, 1, 1, 1, 1, 1]).reshape(1, -1)
-# prediction = model.predict(X_input)
-# print(prediction)
+input = {'direction': 40, 'speed': 5, 'visibility': 1000, 'temperature': 20, 'slp': 1013, 'rh': 90}
