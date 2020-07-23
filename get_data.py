@@ -208,4 +208,25 @@ def calculate_rh(temperature, dew):
 
 base_data['rh'] = calculate_rh(base_data['temperature'], base_data['dew'])
 
+base_data[['direction',
+           'speed',
+           'visibility',
+           'temperature',
+           'dew',
+           'slp',
+           'rh']] = (base_data[['direction',
+                                'speed',
+                                'visibility',
+                                'temperature',
+                                'dew',
+                                'slp',
+                                'rh']].ffill() + base_data[['direction',
+                                                            'speed',
+                                                            'visibility',
+                                                            'temperature',
+                                                            'dew',
+                                                            'slp',
+                                                            'rh']].bfill())/2
+
 base_data.to_csv('./data/isd_data.csv')
+
