@@ -4,7 +4,7 @@ from sklearn.cluster import KMeans
 from scipy.cluster.hierarchy import dendrogram, ward
 from sklearn.preprocessing import StandardScaler
 
-sbgr = pd.read_csv('./data/sbgr_data.csv')
+sbgr = pd.read_csv('./data/isd_data.csv')
 """
 Dataset columns:
 ['direction', 'speed', 'visibility', 

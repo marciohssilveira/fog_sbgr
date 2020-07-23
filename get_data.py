@@ -208,4 +208,4 @@ def calculate_rh(temperature, dew):
 
 base_data['rh'] = calculate_rh(base_data['temperature'], base_data['dew'])
 
-base_data.to_csv('./data/sbgr_data.csv')
+base_data.to_csv('./data/isd_data.csv')

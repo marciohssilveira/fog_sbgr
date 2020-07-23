@@ -29,7 +29,7 @@ inmet_data = inmet_data[['date_time',
                          'temperature_inmet',
                          'dew_inmet']]
 
-isd_data = pd.read_csv('./data/sbgr_data.csv')
+isd_data = pd.read_csv('./data/isd_data.csv')
 isd_data.columns = ['date_time',
                     'direction',
                     'speed',
@@ -58,6 +58,9 @@ isd_data = isd_data[['date_time',
                      'slp',]]
 
 inmet_data['date_time'] = pd.to_datetime(inmet_data['date_time'])
+
+inmet_data.to_csv('./data/inmet_data.csv', index=False)
+
 isd_data['date_time'] = pd.to_datetime(isd_data['date_time'])
 
 data = isd_data.merge(inmet_data, on='date_time', how='left')
@@ -70,3 +73,4 @@ data[['precipitation',
                             'temperature_inmet',
                             'dew_inmet']].fillna(method='pad')
 
+data.to_csv('./data/consolidated_data.csv')
