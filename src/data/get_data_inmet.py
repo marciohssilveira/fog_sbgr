@@ -36,8 +36,8 @@ class GetInmetData:
         print(f'Downloading {self.station} data')
         for year in range(self.start_year, self.end_year, 1):
             url = f'https://portal.inmet.gov.br/uploads/dadoshistoricos/{year}.zip'
-            Path(f'data/raw/{self.station}/inmet/zip/').mkdir(parents=True, exist_ok=True)
-            zip_filename = f'data/raw/{self.station}/inmet/zip/{year}.zip'
+            Path(f'data/raw/inmet/{self.station}/zip/').mkdir(parents=True, exist_ok=True)
+            zip_filename = f'data/raw/inmet/{self.station}/zip/{year}.zip'
             # Only download if file does not exist
             if not os.path.exists(zip_filename):
                 try:
@@ -46,8 +46,9 @@ class GetInmetData:
                     print(f'Unfortunately there is no {year} data available'
                           f' for {self.station}: Error {exception.code}')
                     continue
-            Path(f'data/raw/{self.station}/inmet/csv/').mkdir(parents=True, exist_ok=True)
-            csv_filepath = f'data/raw/{self.station}/inmet/csv/'
+            Path(
+                f'data/raw/inmet/{self.station}/csv/').mkdir(parents=True, exist_ok=True)
+            csv_filepath = f'data/raw/inmet/{self.station}/csv/'
             # # Only unzip if file does not exist
             # if not os.path.exists(_filename):
             with zipfile.ZipFile(zip_filename, 'r') as zip:
@@ -57,37 +58,39 @@ class GetInmetData:
                     if regex.match(file):
                         # Extract a single file from zip
                         # zip.extract(file, csv_filepath)
-                            # open the entry so we can copy it
+                        # open the entry so we can copy it
                         member = zip.open(file)
-                        
+
                         with open(os.path.join(csv_filepath, os.path.basename(file)), 'wb') as outfile:
                             # copy it directly to the output directory,
                             # without creating the intermediate directory
                             shutil.copyfileobj(member, outfile)
 
-        print('Download complete.')
+        print('Download complete\nProcessing files')
         data = self.process_files()
-        data.to_csv(f'data/interim/{self.station}_inmet_data.csv')
-        print('Done')
-        data.index = pd.to_datetime(data.index)
-        return data
+        data.to_csv(f'data/interim/{self.station}_inmet_data.csv', index=False)
+        print('Done!')
 
     def process_files(self):
         """
         Takes all the raw downloaded files and unites them into one file
         """
-        csv_list = os.listdir(path=f'data/raw/{self.station}/inmet/csv/')
+        csv_path = f'data/raw/inmet/{self.station}/csv'
+        csv_list = os.listdir(path=csv_path)
 
         grouped = []
         for file in sorted(csv_list):
             # DATE column is used as index
             # try:
-            inmet_data = pd.read_csv(file, sep=';', skiprows=8, encoding='latin_1')
+            inmet_data = pd.read_csv(f'{csv_path}/{file}',
+                                     sep=';',
+                                     skiprows=8,
+                                     encoding='latin_1')
             inmet_data = inmet_data.drop(inmet_data.columns[-1], axis=1)
             inmet_data = inmet_data[['DATA (YYYY-MM-DD)', 'HORA (UTC)',
-                                        'PRECIPITAÇÃO TOTAL, HORÁRIO (mm)', 'RADIACAO GLOBAL (KJ/m²)']]
+                                     'PRECIPITAÇÃO TOTAL, HORÁRIO (mm)', 'RADIACAO GLOBAL (KJ/m²)']]
             inmet_data.columns = ['date', 'time',
-                                    'precipitation', 'radiation']
+                                  'precipitation', 'radiation']
             inmet_data['date_time'] = inmet_data['date'].astype(
                 str) + ' ' + inmet_data['time'].apply(lambda x: str(x).zfill(4))
             inmet_data = inmet_data[[
@@ -98,7 +101,6 @@ class GetInmetData:
             grouped.append(inmet_data)
         # Stores all data data into a dataframe
         data = pd.concat(grouped, sort=False)
-        data = data.set_index(data.index)  # Sets index to datetime format
         return data
 
       #   isd_data = pd.read_csv('./data/isd_data.csv')

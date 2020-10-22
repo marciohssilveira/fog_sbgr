@@ -34,8 +34,8 @@ class GetIsdData:
         print(f'Downloading {self.station_icao} data')
         for year in range(self.start_year, self.end_year, 1):
             url = f'https://www.ncei.noaa.gov/data/global-hourly/access/{year}/{station_isd}.csv'
-            Path(f'data/raw/{self.station_icao}').mkdir(parents=True, exist_ok=True)
-            filename = f'data/raw/{self.station_icao}/isd/{year}.csv'
+            Path(f'data/raw/isd/{self.station_icao}').mkdir(parents=True, exist_ok=True)
+            filename = f'data/raw/isd/{self.station_icao}/{year}.csv'
             if not os.path.exists(filename):  # Only download if file does not exist
                 try:
                     urllib.request.urlretrieve(url, filename)
@@ -43,14 +43,12 @@ class GetIsdData:
                     print(f'Unfortunately there is no {year} data available'
                           f' for {self.station_icao}: Error {exception.code}')
                     continue
-        print('Downloads completeted')
+        print('Download complete')
         data = self.unify_files()
         print('Extracting data')
         data = self.extract_data(data)
         data.to_csv(f'data/interim/{self.station_icao}_isd_data.csv')
-        print('Done')
-        data.index = pd.to_datetime(data.index)
-        return data
+        print('Done!')
 
     def unify_files(self):
         """
@@ -70,7 +68,6 @@ class GetIsdData:
                 continue
             grouped.append(df)
         data = pd.concat(grouped, sort=False)  # Stores all data data into a dataframe
-        data = data.set_index(data.index)  # Sets index to datetime format
         return data
 
     def get_variable(self, data, column, column_list):
