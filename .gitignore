@@ -1,1 +1,6 @@
 venv
+data/raw/SAO PAULO - MIRANTE/inmet/zip/.DS_Store
+src/.DS_Store
+src/data/__pycache__/__init__.cpython-38.pyc
+src/data/__pycache__/get_data_inmet.cpython-38.pyc
+.DS_Store
