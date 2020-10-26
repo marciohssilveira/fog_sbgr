@@ -91,14 +91,15 @@ class GetInmetData:
                                      'PRECIPITAÇÃO TOTAL, HORÁRIO (mm)', 'RADIACAO GLOBAL (KJ/m²)']]
             inmet_data.columns = ['date', 'time',
                                   'precipitation', 'radiation']
-            inmet_data['date_time'] = inmet_data['date'].astype(
+            inmet_data['DATE'] = inmet_data['date'].astype(
                 str) + ' ' + inmet_data['time'].apply(lambda x: str(x).zfill(4))
             inmet_data = inmet_data[[
-                'date_time', 'precipitation', 'radiation']]
+                'DATE', 'precipitation', 'radiation']]
             # except:
             #     f'{file} data for {self.station} could not be processed.'
             #     continue
             grouped.append(inmet_data)
         # Stores all data data into a dataframe
         data = pd.concat(grouped, sort=False)
+        data = data.apply(lambda x: x.str.replace(',', '.').replace('-9999', 0))
         return data
