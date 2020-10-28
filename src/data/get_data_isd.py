@@ -29,14 +29,18 @@ class GetIsdData:
         """
         Creates the link to download ISD files as well as the directories to put the files
         """
-        isd_station = pd.read_csv(f'data/external/isd_all_stations.csv', index_col=False)
-        station_isd = isd_station[isd_station['ICAO'] == self.station_icao]['CODE'].values[0]
+        isd_station = pd.read_csv(
+            f'data/external/isd_all_stations.csv', index_col=False)
+        station_isd = isd_station[isd_station['ICAO']
+                                  == self.station_icao]['CODE'].values[0]
         print(f'Downloading {self.station_icao} data')
         for year in range(self.start_year, self.end_year, 1):
             url = f'https://www.ncei.noaa.gov/data/global-hourly/access/{year}/{station_isd}.csv'
-            Path(f'data/raw/isd/{self.station_icao}').mkdir(parents=True, exist_ok=True)
+            Path(
+                f'data/raw/isd/{self.station_icao}').mkdir(parents=True, exist_ok=True)
             filename = f'data/raw/isd/{self.station_icao}/{year}.csv'
-            if not os.path.exists(filename):  # Only download if file does not exist
+            # Only download if file does not exist
+            if not os.path.exists(filename):
                 try:
                     urllib.request.urlretrieve(url, filename)
                 except urllib.error.HTTPError as exception:
@@ -47,6 +51,9 @@ class GetIsdData:
         data = self.unify_files()
         print('Extracting data')
         data = self.extract_data(data)
+        codes = pd.read_csv('data/external/wx_codes.csv', sep=';', index_col=False, dtype={'Code': np.int32})
+        codes_dict = codes['Phenomenon'].to_dict()
+        data['phenomenon'] = data['phenomenon'].fillna(0).astype(int).replace(codes_dict)
         data.to_csv(f'data/interim/{self.station_icao}_isd_data.csv')
         print('Done!')
 
@@ -67,7 +74,8 @@ class GetIsdData:
                 f'{file} data for {self.station_icao} could not be processed.'
                 continue
             grouped.append(df)
-        data = pd.concat(grouped, sort=False)  # Stores all data data into a dataframe
+        # Stores all data data into a dataframe
+        data = pd.concat(grouped, sort=False)
         return data
 
     def get_variable(self, data, column, column_list):
@@ -89,7 +97,8 @@ class GetIsdData:
         """
         rh_list = []
         for t, d in zip(temperature, dew):
-            rh = 100 * ((math.exp((17.625 * d) / (243.04 + d))) / (math.exp((17.625 * t) / (243.04 + t))))
+            rh = 100 * ((math.exp((17.625 * d) / (243.04 + d))) /
+                        (math.exp((17.625 * t) / (243.04 + t))))
             rh_list.append(rh)
         return rh_list
 
@@ -103,11 +112,13 @@ class GetIsdData:
         data = data[data['REPORT_TYPE'].isin(['FM-15', 'FM-16', 'SY-MT'])]
 
         # Extracting wind data from WND column
-        wind_cols = ['direction', 'quality', 'type_code', 'speed', 'speed_quality']
+        wind_cols = ['direction', 'quality',
+                     'type_code', 'speed', 'speed_quality']
         wind = self.get_variable(data, 'WND', wind_cols)
 
         # Extracting visibility data from VIS column
-        visibility_cols = ['visibility', 'quality', 'variability', 'quality_variability']
+        visibility_cols = ['visibility', 'quality',
+                           'variability', 'quality_variability']
         visibility = self.get_variable(data, 'VIS', visibility_cols)
 
         # Extracting first group of sigwx data from MW1 column
@@ -178,11 +189,14 @@ class GetIsdData:
         # According with the manual, wind direction as 999 can be missing or variable wind.
         # It can be calm too, as seen by the data (comparing them to METAR)...
         # When the wind is calm, let's set them to 0
-        base_data['direction'].loc[(base_data['direction'] == 999) & (base_data['speed'] == 0)] = 0
-        base_data['speed'].loc[(base_data['direction'] == 999) & (base_data['speed'] == 0)] = 0
+        base_data['direction'].loc[(base_data['direction'] == 999) & (
+            base_data['speed'] == 0)] = 0
+        base_data['speed'].loc[(base_data['direction'] == 999) & (
+            base_data['speed'] == 0)] = 0
 
         # When the wind is variable, let's set only the direction to 0
-        base_data['direction'].loc[(base_data['direction'] == 999) & (base_data['speed'] != 0)] = 0
+        base_data['direction'].loc[(base_data['direction'] == 999) & (
+            base_data['speed'] != 0)] = 0
 
         # According to the manual, speed_rate seen as 9999 means it is missing.
         # Or it is just a typo at the METAR. Let's just delete them...
@@ -234,8 +248,16 @@ class GetIsdData:
         # Pressure is in Hectopascal, which is fine...
 
         # Create a column for relative humidity using a previously defined function
-        base_data['rh'] = self.calculate_rh(base_data['temperature'], base_data['dew'])
+        base_data['rh'] = self.calculate_rh(
+            base_data['temperature'], base_data['dew'])
 
         base_data.replace(to_replace=99999, value=np.nan, inplace=True)
 
         return base_data
+
+    def get_phenomenon_names(self):
+        data = pd.read_csv('data/interim/SBGR_isd_data.csv', index_col='DATE')
+        codes = pd.read_csv('data/external/wx_codes.csv', sep=';', index_col=False,
+                            dtype={'Code': np.int32})
+        codes_dict = codes['Phenomenon'].to_dict()
+        data['phenomenon'] = data['phenomenon'].replace(codes_dict)
