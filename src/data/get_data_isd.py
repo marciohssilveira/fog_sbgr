@@ -148,7 +148,6 @@ class GetIsdData:
                                phenomenon1[['phenomenon']].fillna(99999),
                                sky_cover1[['coverage']].fillna(99999),
                                ceiling[['ceiling']].fillna(99999),
-                               ceiling[['cavok']].fillna(99999),
                                temperature[['temperature']].fillna(99999),
                                dew[['dew']].fillna(99999)],
                               axis=1)
@@ -182,7 +181,7 @@ class GetIsdData:
 
         base_data.columns = ['direction', 'speed', 'visibility',
                              'phenomenon', 'coverage',
-                             'ceiling', 'cavok', 'temperature', 'dew', 'slp']
+                             'ceiling', 'temperature', 'dew', 'slp']
 
         # Some corrections in the data...
         # Wind
@@ -241,15 +240,15 @@ class GetIsdData:
         base_data['speed'] = base_data['speed'].astype(int)
 
         # Ceiling is in meters, let's set them to feet
-        base_data['ceiling'] = base_data['ceiling'] * 3.28084
+        base_data['ceiling'] = np.around(base_data['ceiling'] * 3.28084)
 
         # Visibility is in meters, which is fine...
 
         # Pressure is in Hectopascal, which is fine...
 
         # Create a column for relative humidity using a previously defined function
-        base_data['rh'] = self.calculate_rh(
-            base_data['temperature'], base_data['dew'])
+        base_data['rh'] = np.around(self.calculate_rh(
+            base_data['temperature'], base_data['dew']))
 
         base_data.replace(to_replace=99999, value=np.nan, inplace=True)
 

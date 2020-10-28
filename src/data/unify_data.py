@@ -1,5 +1,6 @@
 
 import pandas as pd
+import numpy as np
 
 isd_data = pd.read_csv('data/interim/SBGR_isd_data.csv')
 inmet_data = pd.read_csv('data/interim/SAO PAULO - MIRANTE_inmet_data.csv')
@@ -13,5 +14,7 @@ data[['precipitation',
       'radiation']] = (data[['precipitation',
                              'radiation']].ffill() + data[['precipitation',
                                                            'radiation']].bfill()) / 2
+data['precipitation'] = np.around(data['precipitation'])
+data['radiation'] = np.around(data['radiation'])
 
 data.to_csv('data/interim/unified_data.csv', index=False)
