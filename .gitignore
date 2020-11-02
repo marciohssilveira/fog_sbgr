@@ -51,3 +51,4 @@ data/raw/isd/SBGR/2016.csv
 data/raw/isd/SBGR/2017.csv
 data/raw/isd/SBGR/2018.csv
 src/data/__pycache__/get_data_isd.cpython-38.pyc
+src/features/__pycache__/feature_engineering.cpython-38.pyc

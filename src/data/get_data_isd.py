@@ -51,9 +51,11 @@ class GetIsdData:
         data = self.unify_files()
         print('Extracting data')
         data = self.extract_data(data)
-        codes = pd.read_csv('data/external/wx_codes.csv', sep=';', index_col=False, dtype={'Code': np.int32})
+        codes = pd.read_csv('data/external/wx_codes.csv',
+                            sep=';', index_col=False, dtype={'Code': np.int32})
         codes_dict = codes['Phenomenon'].to_dict()
-        data['phenomenon'] = data['phenomenon'].fillna(0).astype(int).replace(codes_dict)
+        data['phenomenon'] = data['phenomenon'].fillna(
+            0).astype(int).replace(codes_dict)
         data.to_csv(f'data/interim/{self.station_icao}_isd_data.csv')
         print('Done!')
 
@@ -188,13 +190,15 @@ class GetIsdData:
         # According with the manual, wind direction as 999 can be missing or variable wind.
         # It can be calm too, as seen by the data (comparing them to METAR)...
         # When the wind is calm, let's set them to 0
+        base_data['direction'] = base_data['direction'].astype(int)
+        base_data['speed'] = base_data['speed'].astype(int)
         base_data['direction'].loc[(base_data['direction'] == 999) & (
             base_data['speed'] == 0)] = 0
         base_data['speed'].loc[(base_data['direction'] == 999) & (
             base_data['speed'] == 0)] = 0
 
         # When the wind is variable, let's set only the direction to 0
-        base_data['direction'].loc[(base_data['direction'] == 999) & (
+        base_data['direction'].loc[(base_data['direction'] > 360) & (
             base_data['speed'] != 0)] = 0
 
         # According to the manual, speed_rate seen as 9999 means it is missing.
@@ -209,14 +213,16 @@ class GetIsdData:
         # Ignoring non significant visibility values (above 9000)
         base_data['visibility'] = base_data['visibility'].astype(int)
         base_data['visibility'].loc[base_data['visibility'] >= 10000] = 10000
-        base_data['visibility'].loc[base_data['visibility'] == 999999] = np.nan
 
         # Ceiling
         # According to the manual, ceiling regarded as 99999 means it's missing (from the METAR)
         # and 22000 means unlimited...
-        # BUT... "ceiling values above 1600m (5000ft) are not considered ceiling" Lets just make them NaN...
         base_data['ceiling'] = base_data['ceiling'].astype(int)
-        base_data['ceiling'].loc[(base_data['ceiling'] > 1599)] = np.nan
+        base_data['ceiling'].loc[base_data['ceiling'] >= 1600] = 1600
+
+        # Coverage
+        base_data['coverage'] = base_data['coverage'].astype(int).fillna(0)
+        base_data['coverage'].replace(to_replace=99999, value=0, inplace=True)
 
         # Temperature
         # Temperature and dew are scaled by 10, let's downscale them...
@@ -229,9 +235,9 @@ class GetIsdData:
         base_data['dew'] = base_data['dew'].astype(int)
         base_data['dew'].loc[base_data['dew'] > 99] = np.nan
 
-        # Also, values of pressure greater than 1040 and lesser than 980 are absurd.
+        # Also, values of pressure greater than 1060 and lesser than 900 are absurd.
         # They are probably typos as well so let's get rid of them...
-        # base_data['slp'][(base_data['slp'] > 1040) | (base_data['slp'] < 960)] = np.nan
+        base_data['slp'][(base_data['slp'] > 1060) | (base_data['slp'] < 900)] = np.nan
 
         # Correcting data for standard units
         # Wind direction is in degrees, which is fine...
