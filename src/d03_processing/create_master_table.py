@@ -12,7 +12,7 @@ class Features:
     def create(self):
         data = self.unify_data(self.data_isd, self.data_inmet)
         data = self.remove_outliers(data)
-        data.to_csv('data/02_intermediate/consolidated.csv', index=False)
+        data.to_csv('data/02_intermediate/consolidated.csv')
         data = self.rolling_windows(data)
         data = self.normalize_data(data)
         data.to_csv('data/03_processed/min_max_scaled.csv', index=False)
