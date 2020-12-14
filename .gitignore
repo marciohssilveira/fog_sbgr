@@ -1,54 +1,6 @@
 .vscode
 venv
-data/raw/SAO PAULO - MIRANTE/inmet/zip/.DS_Store
-src/.DS_Store
-src/data/__pycache__/__init__.cpython-38.pyc
-src/data/__pycache__/get_data_inmet.cpython-38.pyc
 .DS_Store
-data/raw/SAO PAULO - MIRANTE/inmet/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2010_A_31-12-2010.CSV
-data/raw/SAO PAULO - MIRANTE/inmet/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2011_A_31-12-2011.CSV
-data/raw/SAO PAULO - MIRANTE/inmet/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2012_A_31-12-2012.CSV
-data/raw/SAO PAULO - MIRANTE/inmet/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2013_A_31-12-2013.CSV
-data/raw/SAO PAULO - MIRANTE/inmet/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2014_A_31-12-2014.CSV
-data/raw/SAO PAULO - MIRANTE/inmet/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2015_A_31-12-2015.CSV
-data/raw/SAO PAULO - MIRANTE/inmet/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2016_A_31-12-2016.CSV
-data/raw/SAO PAULO - MIRANTE/inmet/zip/2010.zip
-data/raw/SAO PAULO - MIRANTE/inmet/zip/2011.zip
-data/raw/SAO PAULO - MIRANTE/inmet/zip/2012.zip
-data/raw/SAO PAULO - MIRANTE/inmet/zip/2013.zip
-data/raw/SAO PAULO - MIRANTE/inmet/zip/2014.zip
-data/raw/SAO PAULO - MIRANTE/inmet/zip/2015.zip
-data/raw/SAO PAULO - MIRANTE/inmet/zip/2016.zip
-data/raw/SAO PAULO - MIRANTE/inmet/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2017_A_31-12-2017.CSV
-data/raw/SAO PAULO - MIRANTE/inmet/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2018_A_31-12-2018.CSV
-data/raw/SAO PAULO - MIRANTE/inmet/zip/2017.zip
-data/raw/SAO PAULO - MIRANTE/inmet/zip/2018.zip
-data/raw/inmet/SAO PAULO - MIRANTE/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2010_A_31-12-2010.CSV
-data/raw/inmet/SAO PAULO - MIRANTE/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2011_A_31-12-2011.CSV
-data/raw/inmet/SAO PAULO - MIRANTE/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2012_A_31-12-2012.CSV
-data/raw/inmet/SAO PAULO - MIRANTE/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2013_A_31-12-2013.CSV
-data/raw/inmet/SAO PAULO - MIRANTE/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2014_A_31-12-2014.CSV
-data/raw/inmet/SAO PAULO - MIRANTE/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2015_A_31-12-2015.CSV
-data/raw/inmet/SAO PAULO - MIRANTE/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2016_A_31-12-2016.CSV
-data/raw/inmet/SAO PAULO - MIRANTE/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2017_A_31-12-2017.CSV
-data/raw/inmet/SAO PAULO - MIRANTE/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-2018_A_31-12-2018.CSV
-data/raw/inmet/SAO PAULO - MIRANTE/zip/2010.zip
-data/raw/inmet/SAO PAULO - MIRANTE/zip/2011.zip
-data/raw/inmet/SAO PAULO - MIRANTE/zip/2012.zip
-data/raw/inmet/SAO PAULO - MIRANTE/zip/2013.zip
-data/raw/inmet/SAO PAULO - MIRANTE/zip/2014.zip
-data/raw/inmet/SAO PAULO - MIRANTE/zip/2015.zip
-data/raw/inmet/SAO PAULO - MIRANTE/zip/2016.zip
-data/raw/inmet/SAO PAULO - MIRANTE/zip/2017.zip
-data/raw/inmet/SAO PAULO - MIRANTE/zip/2018.zip
-data/raw/isd/SBGR/2010.csv
-data/raw/isd/SBGR/2011.csv
-data/raw/isd/SBGR/2012.csv
-data/raw/isd/SBGR/2013.csv
-data/raw/isd/SBGR/2014.csv
-data/raw/isd/SBGR/2015.csv
-data/raw/isd/SBGR/2016.csv
-data/raw/isd/SBGR/2017.csv
-data/raw/isd/SBGR/2018.csv
-src/data/__pycache__/get_data_isd.cpython-38.pyc
-src/features/__pycache__/feature_engineering.cpython-38.pyc
+__pycache__
+data/01_raw/inmet/*
+data/01_raw/isd/*
