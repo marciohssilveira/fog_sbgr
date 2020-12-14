@@ -2,5 +2,6 @@
 venv
 .DS_Store
 __pycache__
-data/01_raw/inmet/*
-data/01_raw/isd/*
+data/01_raw/inmet/SAO PAULO - MIRANTE/csv/INMET_SE_SP_A701_SAO PAULO - MIRANTE_01-01-201*
+data/01_raw/inmet/SAO PAULO - MIRANTE/zip/201*
+data/01_raw/isd/SBGR/201*
